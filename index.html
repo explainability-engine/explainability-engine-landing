@@ -399,15 +399,133 @@
   }
   .footer-right a:hover { color: var(--accent); }
 
+  /* ── GRAPH FORMAT ── */
+  .types-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .type-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .type-table-header {
+    padding: 0.75rem 1.25rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .type-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-name {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .type-desc {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .format-subhead {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-bright);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 3rem 0 1rem;
+  }
+  .format-subhead-desc {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    max-width: 700px;
+  }
+
+  /* Inline type pill for prose */
+  .type-pill {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: var(--accent-glow);
+    padding: 0.1rem 0.45rem;
+    border-radius: 2px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Industry templates grid (matches compliance-grid cadence) */
+  .templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .template-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2rem 1.5rem;
+  }
+  .template-card .template-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .template-card h3 {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    color: var(--text-bright);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .template-stats {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .template-stats span { color: var(--accent); }
+  .template-card p {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     nav { padding: 0 1rem; }
+    .nav-links { gap: 0.9rem; }
+    .nav-links a { font-size: 0.7rem; }
     .hero { padding: 6rem 1.5rem 3rem; }
     section { padding: 4rem 1.5rem; }
     .price-card { padding: 2rem 1.5rem; }
     .enterprise-bar { flex-direction: column; text-align: center; }
     .enterprise-bar .btn-primary { align-self: center; }
     footer { flex-direction: column; }
+    .types-grid { grid-template-columns: 1fr; }
+    .type-row { grid-template-columns: 120px 1fr; gap: 0.75rem; padding: 0.75rem 1rem; }
+    .type-name { font-size: 0.75rem; }
+    .type-desc { font-size: 0.78rem; }
+    pre { font-size: 0.72rem; padding: 1rem; }
   }
 
   /* ── ANIMATIONS ── */
@@ -431,8 +549,9 @@
   <div class="nav-logo">EXPLAINABILITY ENGINE</div>
   <div class="nav-links">
     <a href="#how">How it works</a>
-    <a href="#pricing">Pricing</a>
+    <a href="#format">Graph format</a>
     <a href="#api">API</a>
+    <a href="#pricing">Pricing</a>
     <a href="#pricing" class="nav-cta">Start free trial</a>
   </div>
 </nav>
@@ -481,6 +600,229 @@
   </div>
 </section>
 
+<!-- GRAPH FORMAT -->
+<section id="format">
+  <div class="section-label">Graph format</div>
+  <h2>Build your first decision graph</h2>
+  <p>The engine accepts a directed graph of typed nodes and typed edges. Below is the complete type system, the JSON schema, and two runnable examples. Every example on this page is a valid payload for <code style="font-family:var(--mono);color:var(--accent);">POST /v1/explain</code>.</p>
+
+  <!-- A. TYPE SYSTEM -->
+  <div class="format-subhead">Type system</div>
+  <div class="format-subhead-desc">Six node types and six edge types. The engine rejects any value outside this set.</div>
+  <div class="types-grid">
+
+    <div class="type-table">
+      <div class="type-table-header">Node types · 6</div>
+      <div class="type-row">
+        <div class="type-name">DECISION</div>
+        <div class="type-desc">The outcome being explained. The engine focuses analysis on a DECISION node by default.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">CLAIM</div>
+        <div class="type-desc">An intermediate statement the decision depends on. Claims can be supported or contradicted.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">EVIDENCE</div>
+        <div class="type-desc">A fact or signal that supports or contradicts claims. Typically carries a confidence value.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">ASSUMPTION</div>
+        <div class="type-desc">An unverified premise required for the decision. Flagged separately from evidence.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">SOURCE</div>
+        <div class="type-desc">Origin of evidence — a document, registry, API, or database reference.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">RULE</div>
+        <div class="type-desc">A named policy or model rule referenced by claims. Used for traceability.</div>
+      </div>
+    </div>
+
+    <div class="type-table">
+      <div class="type-table-header">Edge types · 6</div>
+      <div class="type-row">
+        <div class="type-name">SUPPORTS</div>
+        <div class="type-desc">Source node positively backs the target. Typical: EVIDENCE → CLAIM.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">CONTRADICTS</div>
+        <div class="type-desc">Source node opposes the target. Detected by the rule engine as a conflict flag.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">DEPENDS_ON</div>
+        <div class="type-desc">Source node requires the target to be valid. Typical: DECISION → CLAIM.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">DERIVES</div>
+        <div class="type-desc">Source node is computed or derived from the target.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">REFERS_TO</div>
+        <div class="type-desc">Weak reference link. Preserved in the graph but does not affect scoring by default.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-name">HAS_SOURCE</div>
+        <div class="type-desc">Binds an EVIDENCE node to its SOURCE node for provenance tracking.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- B. SCHEMA -->
+  <div class="format-subhead">JSON schema</div>
+  <div class="format-subhead-desc">Required and optional fields. Unknown fields are preserved but do not affect the canonical graph hash.</div>
+  <div class="code-section">
+    <div class="code-header">
+      <span>Request body · application/json</span>
+      <span class="code-dot"></span>
+    </div>
+    <pre>{
+  <span class="c-key">"graph"</span>: {                             <span class="c-com">// required</span>
+    <span class="c-key">"version"</span>: <span class="c-str">"1.0"</span>,                     <span class="c-com">// optional, defaults to "1.0"</span>
+    <span class="c-key">"nodes"</span>: [                            <span class="c-com">// required, non-empty</span>
+      {
+        <span class="c-key">"id"</span>:    <span class="c-str">"n1"</span>,                     <span class="c-com">// required, unique within graph</span>
+        <span class="c-key">"type"</span>:  <span class="c-str">"DECISION"</span>,               <span class="c-com">// required, one of 6 node types</span>
+        <span class="c-key">"label"</span>: <span class="c-str">"Human-readable label"</span>,   <span class="c-com">// required</span>
+        <span class="c-key">"data"</span>:  { },                      <span class="c-com">// optional, arbitrary payload</span>
+        <span class="c-key">"meta"</span>:  {
+          <span class="c-key">"confidence"</span>: <span class="c-num">0.85</span>,           <span class="c-com">// optional, range [0, 1]</span>
+          <span class="c-key">"tags"</span>:       [<span class="c-str">"finance"</span>],      <span class="c-com">// optional</span>
+          <span class="c-key">"sourceId"</span>:   <span class="c-str">"s1"</span>             <span class="c-com">// optional, for EVIDENCE nodes</span>
+        }
+      }
+    ],
+    <span class="c-key">"edges"</span>: [                            <span class="c-com">// required</span>
+      {
+        <span class="c-key">"id"</span>:   <span class="c-str">"e1"</span>,                      <span class="c-com">// required, unique within graph</span>
+        <span class="c-key">"type"</span>: <span class="c-str">"SUPPORTS"</span>,                <span class="c-com">// required, one of 6 edge types</span>
+        <span class="c-key">"from"</span>: <span class="c-str">"n2"</span>,                      <span class="c-com">// required, must match a node id</span>
+        <span class="c-key">"to"</span>:   <span class="c-str">"n1"</span>,                      <span class="c-com">// required, must match a node id</span>
+        <span class="c-key">"meta"</span>: { <span class="c-key">"weight"</span>: <span class="c-num">0.7</span> }          <span class="c-com">// optional, range [0, 1]</span>
+      }
+    ]
+  },
+  <span class="c-key">"context"</span>: {                           <span class="c-com">// optional, all fields have defaults</span>
+    <span class="c-key">"layerSet"</span>:            <span class="c-str">"audit"</span>,       <span class="c-com">// audit | human | risk | dev</span>
+    <span class="c-key">"depth"</span>:               <span class="c-num">3</span>,             <span class="c-com">// 1..10, default 3</span>
+    <span class="c-key">"confidenceThreshold"</span>: <span class="c-num">0.6</span>,           <span class="c-com">// 0..1, default 0.6</span>
+    <span class="c-key">"focusNodeId"</span>:         <span class="c-str">"n1"</span>           <span class="c-com">// default = first DECISION node</span>
+  }
+}</pre>
+  </div>
+
+  <!-- C. MINIMAL EXAMPLE -->
+  <div class="format-subhead">Minimal example · 5 nodes</div>
+  <div class="format-subhead-desc">A minimal credit-risk graph: one decision backed by two claims, one with supporting evidence and a source.</div>
+  <div class="code-section">
+    <div class="code-header">
+      <span>POST /v1/explain · request</span>
+      <span class="code-dot"></span>
+    </div>
+    <pre>{
+  <span class="c-key">"graph"</span>: {
+    <span class="c-key">"version"</span>: <span class="c-str">"1.0"</span>,
+    <span class="c-key">"nodes"</span>: [
+      { <span class="c-key">"id"</span>: <span class="c-str">"d1"</span>, <span class="c-key">"type"</span>: <span class="c-str">"DECISION"</span>,   <span class="c-key">"label"</span>: <span class="c-str">"Decision: HIGH_RISK"</span>,
+        <span class="c-key">"data"</span>: { <span class="c-key">"decision"</span>: <span class="c-str">"HIGH_RISK"</span> }, <span class="c-key">"meta"</span>: { <span class="c-key">"confidence"</span>: <span class="c-num">0.78</span> } },
+
+      { <span class="c-key">"id"</span>: <span class="c-str">"c1"</span>, <span class="c-key">"type"</span>: <span class="c-str">"CLAIM"</span>,      <span class="c-key">"label"</span>: <span class="c-str">"Income volatility increases default risk"</span>,
+        <span class="c-key">"meta"</span>: { <span class="c-key">"confidence"</span>: <span class="c-num">0.72</span> } },
+
+      { <span class="c-key">"id"</span>: <span class="c-str">"c2"</span>, <span class="c-key">"type"</span>: <span class="c-str">"CLAIM"</span>,      <span class="c-key">"label"</span>: <span class="c-str">"Recent delinquencies indicate risk"</span>,
+        <span class="c-key">"meta"</span>: { <span class="c-key">"confidence"</span>: <span class="c-num">0.83</span> } },
+
+      { <span class="c-key">"id"</span>: <span class="c-str">"e1"</span>, <span class="c-key">"type"</span>: <span class="c-str">"EVIDENCE"</span>,   <span class="c-key">"label"</span>: <span class="c-str">"Bank statements show irregular cashflow"</span>,
+        <span class="c-key">"meta"</span>: { <span class="c-key">"confidence"</span>: <span class="c-num">0.71</span>, <span class="c-key">"sourceId"</span>: <span class="c-str">"s1"</span> } },
+
+      { <span class="c-key">"id"</span>: <span class="c-str">"s1"</span>, <span class="c-key">"type"</span>: <span class="c-str">"SOURCE"</span>,     <span class="c-key">"label"</span>: <span class="c-str">"Source: Bank statements (PDF)"</span>,
+        <span class="c-key">"data"</span>: { <span class="c-key">"kind"</span>: <span class="c-str">"document"</span>, <span class="c-key">"ref"</span>: <span class="c-str">"bank_statements.pdf"</span> } }
+    ],
+    <span class="c-key">"edges"</span>: [
+      { <span class="c-key">"id"</span>: <span class="c-str">"x1"</span>, <span class="c-key">"type"</span>: <span class="c-str">"DEPENDS_ON"</span>, <span class="c-key">"from"</span>: <span class="c-str">"d1"</span>, <span class="c-key">"to"</span>: <span class="c-str">"c1"</span>, <span class="c-key">"meta"</span>: { <span class="c-key">"weight"</span>: <span class="c-num">0.6</span> } },
+      { <span class="c-key">"id"</span>: <span class="c-str">"x2"</span>, <span class="c-key">"type"</span>: <span class="c-str">"DEPENDS_ON"</span>, <span class="c-key">"from"</span>: <span class="c-str">"d1"</span>, <span class="c-key">"to"</span>: <span class="c-str">"c2"</span>, <span class="c-key">"meta"</span>: { <span class="c-key">"weight"</span>: <span class="c-num">0.8</span> } },
+      { <span class="c-key">"id"</span>: <span class="c-str">"x3"</span>, <span class="c-key">"type"</span>: <span class="c-str">"SUPPORTS"</span>,   <span class="c-key">"from"</span>: <span class="c-str">"e1"</span>, <span class="c-key">"to"</span>: <span class="c-str">"c1"</span>, <span class="c-key">"meta"</span>: { <span class="c-key">"weight"</span>: <span class="c-num">0.7</span> } },
+      { <span class="c-key">"id"</span>: <span class="c-str">"x4"</span>, <span class="c-key">"type"</span>: <span class="c-str">"HAS_SOURCE"</span>, <span class="c-key">"from"</span>: <span class="c-str">"e1"</span>, <span class="c-key">"to"</span>: <span class="c-str">"s1"</span> }
+    ]
+  },
+  <span class="c-key">"context"</span>: { <span class="c-key">"focusNodeId"</span>: <span class="c-str">"d1"</span>, <span class="c-key">"depth"</span>: <span class="c-num">3</span> }
+}</pre>
+  </div>
+
+  <!-- D. EXTENDED EXAMPLE WITH CONTRADICTS -->
+  <div class="format-subhead">Extended example · detecting conflicts</div>
+  <div class="format-subhead-desc">Adding a third claim that <span class="type-pill">CONTRADICTS</span> one of the supported claims. The rule engine emits a <span class="type-pill">CONFLICT</span> flag with <code style="font-family:var(--mono);color:var(--accent);font-size:0.85em;">severity: "high"</code> on the affected node.</div>
+  <div class="code-section">
+    <div class="code-header">
+      <span>Graph additions</span>
+      <span class="code-dot"></span>
+    </div>
+    <pre><span class="c-com">// Extra node — a claim that disagrees with c2</span>
+{ <span class="c-key">"id"</span>: <span class="c-str">"c3"</span>, <span class="c-key">"type"</span>: <span class="c-str">"CLAIM"</span>, <span class="c-key">"label"</span>: <span class="c-str">"Stable employment reduces risk"</span>,
+  <span class="c-key">"meta"</span>: { <span class="c-key">"confidence"</span>: <span class="c-num">0.64</span> } }
+
+<span class="c-com">// Extra evidence supporting c3</span>
+{ <span class="c-key">"id"</span>: <span class="c-str">"e2"</span>, <span class="c-key">"type"</span>: <span class="c-str">"EVIDENCE"</span>,
+  <span class="c-key">"label"</span>: <span class="c-str">"Employment record: 3 years at current employer"</span>,
+  <span class="c-key">"meta"</span>: { <span class="c-key">"confidence"</span>: <span class="c-num">0.80</span> } }
+
+<span class="c-com">// Extra edges — now c3 both supports the decision and contradicts c2</span>
+{ <span class="c-key">"id"</span>: <span class="c-str">"x5"</span>, <span class="c-key">"type"</span>: <span class="c-str">"DEPENDS_ON"</span>,  <span class="c-key">"from"</span>: <span class="c-str">"d1"</span>, <span class="c-key">"to"</span>: <span class="c-str">"c3"</span> }
+{ <span class="c-key">"id"</span>: <span class="c-str">"x6"</span>, <span class="c-key">"type"</span>: <span class="c-str">"SUPPORTS"</span>,    <span class="c-key">"from"</span>: <span class="c-str">"e2"</span>, <span class="c-key">"to"</span>: <span class="c-str">"c3"</span> }
+{ <span class="c-key">"id"</span>: <span class="c-str">"x7"</span>, <span class="c-key">"type"</span>: <span class="c-str">"CONTRADICTS"</span>, <span class="c-key">"from"</span>: <span class="c-str">"c2"</span>, <span class="c-key">"to"</span>: <span class="c-str">"c3"</span> }</pre>
+  </div>
+  <div class="code-section" style="margin-top: 1rem;">
+    <div class="code-header">
+      <span>Response fragment · flag emitted</span>
+      <span class="code-dot"></span>
+    </div>
+    <pre>{
+  <span class="c-key">"ok"</span>: <span class="c-num">true</span>,
+  <span class="c-key">"scores"</span>: {
+    <span class="c-key">"explainability"</span>: <span class="c-num">0.63</span>,           <span class="c-com">// conflict penalty applied</span>
+    <span class="c-key">"confidence"</span>:     <span class="c-num">0.74</span>
+  },
+  <span class="c-key">"flags"</span>: [
+    {
+      <span class="c-key">"kind"</span>:     <span class="c-str">"CONFLICT"</span>,
+      <span class="c-key">"severity"</span>: <span class="c-str">"high"</span>,
+      <span class="c-key">"nodeId"</span>:   <span class="c-str">"c3"</span>,
+      <span class="c-key">"message"</span>:  <span class="c-str">"Both SUPPORTS (1) and CONTRADICTS (1) links present."</span>
+    }
+  ],
+  <span class="c-key">"reproducibilityStamp"</span>: <span class="c-str">"v2.5:&lt;contextHash&gt;:&lt;artifactsHash&gt;:&lt;executionHash&gt;:&lt;sensitivityHash&gt;"</span>,
+  <span class="c-key">"proof"</span>: { <span class="c-com">/* SHA-256 determinism proof binding all computation hashes */</span> }
+}</pre>
+  </div>
+
+  <!-- E. INDUSTRY TEMPLATES -->
+  <div class="format-subhead">Industry templates</div>
+  <div class="format-subhead-desc">Production-ready starter graphs modelling real decision logic. Delivered as part of customer onboarding.</div>
+  <div class="templates-grid">
+    <div class="template-card">
+      <div class="template-label">Finance</div>
+      <h3>Credit Risk Scoring</h3>
+      <div class="template-stats"><span>11</span> nodes · <span>11</span> edges</div>
+      <p>Loan approval graph covering income volatility, delinquency history, employment stability, and regional calibration assumptions.</p>
+    </div>
+    <div class="template-card">
+      <div class="template-label">Healthcare</div>
+      <h3>Medical Triage</h3>
+      <div class="template-stats"><span>14</span> nodes · <span>14</span> edges</div>
+      <p>Clinical decision graph with vitals, comorbidity claims, source-linked lab evidence, and severity scoring.</p>
+    </div>
+    <div class="template-card">
+      <div class="template-label">Fraud &amp; AML</div>
+      <h3>Fraud Detection</h3>
+      <div class="template-stats"><span>30</span> nodes · <span>37</span> edges</div>
+      <p>Multi-signal fraud graph: device fingerprinting, IP proxy flags, behavioural anomalies, and KYC source attestations.</p>
+    </div>
+  </div>
+  <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--text-dim);">Templates are included with Professional and higher plans. Customers receive the full JSON files, a mapping guide for adapting node types to their own feature set, and a verification checklist against the reproducibility stamp.</p>
+</section>
+
+
 <!-- API EXAMPLE -->
 <section id="api">
   <div class="section-label">API</div>
@@ -494,21 +836,23 @@
     <pre><span class="c-com"># Send your decision graph</span>
 curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/explain \
   -H <span class="c-str">"Content-Type: application/json"</span> \
-  -H <span class="c-str">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="c-str">"x-api-key: YOUR_API_KEY"</span> \
   -d <span class="c-str">'{
     "graph": {
+      "version": "1.0",
       "nodes": [
-        {"id": "E1", "type": "EVIDENCE", "payload": {"text": "Model accuracy 94.2%", "confidence": 0.94}},
-        {"id": "C1", "type": "CLAIM",    "payload": {"text": "Model is production-ready"}},
-        {"id": "D1", "type": "DECISION", "payload": {"text": "Approve for deployment"}}
+        {"id": "e1", "type": "EVIDENCE", "label": "Model accuracy 94.2%",
+         "meta": {"confidence": 0.94}},
+        {"id": "c1", "type": "CLAIM",    "label": "Model is production-ready",
+         "meta": {"confidence": 0.80}},
+        {"id": "d1", "type": "DECISION", "label": "Approve for deployment"}
       ],
       "edges": [
-        {"source": "E1", "target": "C1", "type": "SUPPORTS"},
-        {"source": "C1", "target": "D1", "type": "DEPENDENCY"}
+        {"id": "x1", "type": "SUPPORTS",   "from": "e1", "to": "c1"},
+        {"id": "x2", "type": "DEPENDS_ON", "from": "d1", "to": "c1"}
       ]
     },
-    "focus": "D1",
-    "depth": 3
+    "context": { "focusNodeId": "d1", "depth": 3 }
   }'</span></pre>
   </div>
   <div class="code-section" style="margin-top: 1rem;">
@@ -517,21 +861,22 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
       <span class="code-dot"></span>
     </div>
     <pre>{
-  <span class="c-key">"score"</span>:       <span class="c-num">0.8750</span>,
-  <span class="c-key">"graph_hash"</span>:  <span class="c-str">"a7f3c9...sha256"</span>,
-  <span class="c-key">"bundle_hash"</span>: <span class="c-str">"e4b1d2...sha256"</span>,
-  <span class="c-key">"conflicts"</span>:   [],
-  <span class="c-key">"gaps"</span>:        [],
-  <span class="c-key">"artifacts"</span>: {
-    <span class="c-key">"text"</span>:   <span class="c-str">"Decision D1 is supported by 1 claim..."</span>,
-    <span class="c-key">"report"</span>: { ... },
-    <span class="c-key">"json"</span>:   { ... },
-    <span class="c-key">"prompt"</span>: <span class="c-str">"[Structured prompt for downstream AI]"</span>
+  <span class="c-key">"ok"</span>: <span class="c-num">true</span>,
+  <span class="c-key">"requestId"</span>: <span class="c-str">"req_2a8f..."</span>,
+  <span class="c-key">"scores"</span>: {
+    <span class="c-key">"explainability"</span>: <span class="c-num">0.8750</span>,
+    <span class="c-key">"confidence"</span>:     <span class="c-num">0.8700</span>
   },
-  <span class="c-key">"verification"</span>: {
-    <span class="c-key">"reproducible"</span>: <span class="c-num">true</span>,
-    <span class="c-key">"policy_hash"</span>: <span class="c-str">"b9c4e1...sha256"</span>
-  }
+  <span class="c-key">"flags"</span>:           [],
+  <span class="c-key">"topContributors"</span>: [ <span class="c-com">/* ranked evidence + claims */</span> ],
+  <span class="c-key">"projections"</span>: {
+    <span class="c-key">"text"</span>:   <span class="c-str">"Decision d1 is supported by 1 claim..."</span>,
+    <span class="c-key">"report"</span>: <span class="c-str">"..."</span>,
+    <span class="c-key">"prompt"</span>: <span class="c-str">"[Structured prompt for downstream AI]"</span>,
+    <span class="c-key">"json"</span>:   { }
+  },
+  <span class="c-key">"reproducibilityStamp"</span>: <span class="c-str">"v2.5:&lt;contextHash&gt;:&lt;artifactsHash&gt;:&lt;executionHash&gt;:&lt;sensitivityHash&gt;"</span>,
+  <span class="c-key">"proof"</span>: { <span class="c-com">/* SHA-256 determinism proof binding all computation hashes */</span> }
 }</pre>
   </div>
 </section>
