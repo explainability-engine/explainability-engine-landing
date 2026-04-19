@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Explainability Engine — Deterministic AI Explainability API</title>
-<meta name="description" content="Deterministic, model-agnostic API for AI explainability. SHA-256 cryptographic proof chains. EU AI Act Article 13 compliance. Patent pending P.455178.">
+<meta name="description" content="Deterministic, model-agnostic API for AI explainability. SHA-256 cryptographic proof chains. Designed to support EU AI Act Article 13 transparency requirements. Patent pending P.455178.">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -343,6 +343,24 @@
     color: var(--text-dim);
     line-height: 1.6;
   }
+  .compliance-card .plain {
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+  }
+  .compliance-card .plain-label {
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.62rem;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
 
   /* ── ENTERPRISE ── */
   .enterprise-bar {
@@ -558,7 +576,7 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="badge">Patent Pending P.455178 · EU AI Act Article 13</div>
+  <div class="badge">Patent Pending P.455178 · Designed for EU AI Act Article 13</div>
   <h1>Deterministic <span>explainability</span> for every AI decision.</h1>
   <p>A model-agnostic API that generates SHA-256 cryptographic proof chains for AI decisions. No LLMs. No approximations. Bit-reproducible audit artifacts — every time.</p>
   <div class="hero-buttons">
@@ -885,23 +903,39 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
 <section>
   <div class="section-label">Built for compliance</div>
   <h2>Why deterministic matters</h2>
-  <p>Stochastic explanations fail audits. Ours don't.</p>
+  <p>Stochastic explanations are hard to audit — identical inputs can produce different outputs. Our pipeline is bit-reproducible by design.</p>
   <div class="compliance-grid">
     <div class="compliance-card">
       <h3>EU AI Act Article 13</h3>
-      <p>High-risk AI systems must provide transparent, interpretable outputs. Our deterministic pipeline meets this requirement with cryptographic proof — not approximations.</p>
+      <p>Article 13 requires high-risk AI systems to provide transparent, interpretable outputs. Our deterministic pipeline is designed to support these requirements through cryptographic proof chains rather than statistical approximations.</p>
+      <div class="plain">
+        <span class="plain-label">For your auditor</span>
+        They can re-run the computation on their own machine and get byte-identical results. No reliance on our servers, no black box.
+      </div>
     </div>
     <div class="compliance-card">
       <h3>Bit-Reproducibility</h3>
       <p>Identical inputs always produce byte-identical outputs. Across platforms, across time. Verified by SHA-256 bundle hash.</p>
+      <div class="plain">
+        <span class="plain-label">In plain language</span>
+        Think of it as a notary seal on an AI decision. If anything about the explanation changes, the seal no longer matches.
+      </div>
     </div>
     <div class="compliance-card">
       <h3>No LLM Dependency</h3>
       <p>Zero stochastic components. No temperature, no sampling, no prompt sensitivity. Pure deterministic graph computation.</p>
+      <div class="plain">
+        <span class="plain-label">Why it matters</span>
+        An LLM asked the same question twice can give different explanations. The engine gives the same answer every time — so auditors can verify it.
+      </div>
     </div>
     <div class="compliance-card">
       <h3>Third-Party Verification</h3>
-      <p>Any auditor can re-execute the pipeline with the same inputs and verify byte-level output identity. True independent audit capability.</p>
+      <p>Any auditor can re-execute the pipeline with the same inputs and verify byte-level output identity — designed for independent audit workflows.</p>
+      <div class="plain">
+        <span class="plain-label">What this enables</span>
+        The auditor does not need access to your AI model. They only need the graph, the context parameters, and the proof. Provenance is portable.
+      </div>
     </div>
   </div>
 </section>
