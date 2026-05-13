@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Explainability Engine — Deterministic AI Explainability API</title>
-<meta name="description" content="Deterministic, model-agnostic API for AI explainability. SHA-256 cryptographic proof chains. Designed to support EU AI Act Article 13 transparency requirements. Patent pending P.455178.">
+<title>Explainability Engine — Audit Infrastructure for AI Agents</title>
+<meta name="description" content="Deterministic, model-agnostic API producing cryptographically sealed audit bundles for AI-driven decisions. Re-derivable bit-for-bit from inputs alone. Designed for AI agents in production. Patent P.455178.">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -319,7 +319,7 @@
   .price-card .btn-primary { text-align: center; width: 100%; display: block; }
   .price-card .btn-secondary { text-align: center; width: 100%; display: block; }
 
-  /* ── COMPLIANCE ── */
+  /* ── COMPLIANCE / AUDIT-READY ── */
   .compliance-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -566,6 +566,7 @@
 <nav>
   <div class="nav-logo">EXPLAINABILITY ENGINE</div>
   <div class="nav-links">
+    <a href="#who">Who it's for</a>
     <a href="#how">How it works</a>
     <a href="#format">Graph format</a>
     <a href="#api">API</a>
@@ -576,20 +577,61 @@
 
 <!-- HERO -->
 <div class="hero">
-  <div class="badge">Patent Pending P.455178 · Designed for EU AI Act Article 13</div>
-  <h1>Deterministic <span>explainability</span> for every AI decision.</h1>
-  <p>A model-agnostic API that generates SHA-256 cryptographic proof chains for AI decisions. No LLMs. No approximations. Bit-reproducible audit artifacts — every time.</p>
+  <div class="badge">Patent P.455178 · Audit for Agentic AI</div>
+  <h1>Audit infrastructure for <span>AI agents</span> in production.</h1>
+  <p>When your agent makes a decision someone will ask about later, logs show what happened — they don't prove why. Engine produces structured, cryptographically sealed audit bundles for AI-driven decisions, re-derivable bit-for-bit from inputs alone. Six months later, or six years later.</p>
   <div class="hero-buttons">
     <a href="#pricing" class="btn-primary">Start 14-day free trial</a>
     <a href="#api" class="btn-secondary">View API docs</a>
   </div>
 </div>
 
+<!-- WHO IT'S FOR -->
+<section id="who">
+  <div class="section-label">Who it's for</div>
+  <h2>Built for systems shipping decisions into production</h2>
+  <p>Engine is designed for teams whose AI systems make decisions with real consequences — and whose customers, auditors, or regulators will eventually ask how a specific decision was made.</p>
+  <div class="compliance-grid">
+    <div class="compliance-card">
+      <h3>AI Agent Platforms</h3>
+      <p>Vertical and horizontal agents shipping into enterprise production — coding agents, customer support, sales, legal, medical, browser-use, multi-agent orchestration.</p>
+      <div class="plain">
+        <span class="plain-label">When it matters</span>
+        Enterprise procurement asks for a per-decision audit trail. Observability stacks give a timeline. Engine gives a verifiable artifact.
+      </div>
+    </div>
+    <div class="compliance-card">
+      <h3>Automated Decision Pipelines</h3>
+      <p>Insurtech claims, fintech lending, fraud detection, KYC/AML, credit scoring — high-volume operational AI where each decision needs an auditable record.</p>
+      <div class="plain">
+        <span class="plain-label">When it matters</span>
+        Six months later, a customer disputes a decision. The decision has to be reconstructable from inputs alone, independent of vendor logs.
+      </div>
+    </div>
+    <div class="compliance-card">
+      <h3>HR-tech &amp; Employment AI</h3>
+      <p>Candidate screening, performance evaluation, compensation decisions, workforce analytics — under direct regulatory pressure (NYC LL 144, EU AI Act Annex III, GDPR Art. 22).</p>
+      <div class="plain">
+        <span class="plain-label">When it matters</span>
+        A candidate challenges an automated decision. The vendor needs to produce a verifiable record of what evidence the system actually had.
+      </div>
+    </div>
+    <div class="compliance-card">
+      <h3>High-Volume Operational AI</h3>
+      <p>Medical triage, content moderation, compliance automation, document classification — domains where committee-per-decision governance does not scale.</p>
+      <div class="plain">
+        <span class="plain-label">When it matters</span>
+        An internal review or external regulator asks for a sample of decisions. Each one needs to come with its own sealed reasoning chain.
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- HOW IT WORKS -->
 <section id="how">
   <div class="section-label">How it works</div>
   <h2>Deterministic computational pipeline</h2>
-  <p>Your AI decision graph enters as input. A verifiable, reproducible audit bundle comes out. Every time, identically.</p>
+  <p>Your AI decision graph enters as input. A cryptographically sealed audit bundle comes out — re-derivable bit-for-bit from the same inputs, on any machine, any time.</p>
   <div class="pipeline">
     <div class="pipeline-step" data-step="01 — INGEST">
       <h3>Immutable Graph Container</h3>
@@ -605,15 +647,15 @@
     </div>
     <div class="pipeline-step" data-step="04 — EVALUATE">
       <h3>Rule Engine</h3>
-      <p>Structural conflict detection, evidential gap analysis. Fixed priority rule evaluation with deterministic output ordering.</p>
+      <p>Structural conflict detection (DirectConflict), evidential gap analysis (UnsupportedClaim). Fixed priority rule evaluation with deterministic output ordering.</p>
     </div>
     <div class="pipeline-step" data-step="05 — SCORE">
       <h3>Explainability Score</h3>
       <p>Bounded σ ∈ [0.0, 1.0] computed from evidence confidence, conflict penalty, and gap penalty. IEEE 754 deterministic rounding.</p>
     </div>
     <div class="pipeline-step" data-step="06 — EXPORT">
-      <h3>Verifiable Bundle</h3>
-      <p>TEXT, REPORT, JSON, and PROMPT artifacts. Bundle hash enables independent third-party re-execution and byte-level verification.</p>
+      <h3>Sealed Bundle</h3>
+      <p>TEXT, REPORT, JSON, and PROMPT artifacts. SHA-256 bundle_hash enables independent third-party re-execution and byte-level verification.</p>
     </div>
   </div>
 </section>
@@ -816,7 +858,7 @@
 
   <!-- E. INDUSTRY TEMPLATES -->
   <div class="format-subhead">Industry templates</div>
-  <div class="format-subhead-desc">Production-ready starter graphs modelling real decision logic. Delivered as part of customer onboarding.</div>
+  <div class="format-subhead-desc">Production-ready starter graphs modelling real decision logic. Delivered as part of customer onboarding. Custom templates for specific agent and decision-pipeline use cases are part of Professional and higher plans.</div>
   <div class="templates-grid">
     <div class="template-card">
       <div class="template-label">Finance</div>
@@ -845,7 +887,7 @@
 <section id="api">
   <div class="section-label">API</div>
   <h2>One request. Full audit trail.</h2>
-  <p>Send your decision graph. Get back a cryptographically verifiable explainability bundle.</p>
+  <p>Send your decision graph. Get back a cryptographically sealed audit bundle — independently verifiable by any third party with the same inputs.</p>
   <div class="code-section">
     <div class="code-header">
       <span>POST /v1/explain</span>
@@ -899,42 +941,42 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
   </div>
 </section>
 
-<!-- COMPLIANCE -->
+<!-- AUDIT-READY BY DESIGN -->
 <section>
-  <div class="section-label">Built for compliance</div>
-  <h2>Why deterministic matters</h2>
-  <p>Stochastic explanations are hard to audit — identical inputs can produce different outputs. Our pipeline is bit-reproducible by design.</p>
+  <div class="section-label">Audit-ready by design</div>
+  <h2>What enterprise procurement actually wants</h2>
+  <p>A logging stack records events. A reasoning trace records narration. Neither is a verifiable artifact. Engine is built around four properties that turn an AI decision into something independently auditable.</p>
   <div class="compliance-grid">
     <div class="compliance-card">
-      <h3>EU AI Act Article 13</h3>
-      <p>Article 13 requires high-risk AI systems to provide transparent, interpretable outputs. Our deterministic pipeline is designed to support these requirements through cryptographic proof chains rather than statistical approximations.</p>
-      <div class="plain">
-        <span class="plain-label">For your auditor</span>
-        They can re-run the computation on their own machine and get byte-identical results. No reliance on our servers, no black box.
-      </div>
-    </div>
-    <div class="compliance-card">
       <h3>Bit-Reproducibility</h3>
-      <p>Identical inputs always produce byte-identical outputs. Across platforms, across time. Verified by SHA-256 bundle hash.</p>
+      <p>Identical inputs always produce byte-identical outputs. Across platforms, across time. Verified by SHA-256 bundle_hash.</p>
       <div class="plain">
         <span class="plain-label">In plain language</span>
         Think of it as a notary seal on an AI decision. If anything about the explanation changes, the seal no longer matches.
       </div>
     </div>
     <div class="compliance-card">
-      <h3>No LLM Dependency</h3>
-      <p>Zero stochastic components. No temperature, no sampling, no prompt sensitivity. Pure deterministic graph computation.</p>
+      <h3>Third-Party Verification</h3>
+      <p>Any auditor can re-execute the pipeline with the same inputs and verify byte-level output identity — designed for independent audit workflows, vendor-agnostic.</p>
       <div class="plain">
-        <span class="plain-label">Why it matters</span>
-        An LLM asked the same question twice can give different explanations. The engine gives the same answer every time — so auditors can verify it.
+        <span class="plain-label">What this enables</span>
+        The auditor does not need access to your AI model or your servers. They only need the graph, the context parameters, and the proof. Provenance is portable.
       </div>
     </div>
     <div class="compliance-card">
-      <h3>Third-Party Verification</h3>
-      <p>Any auditor can re-execute the pipeline with the same inputs and verify byte-level output identity — designed for independent audit workflows.</p>
+      <h3>No LLM Dependency</h3>
+      <p>Zero stochastic components inside the audit pipeline. No temperature, no sampling, no prompt sensitivity. Pure deterministic graph computation around the LLM output, not inside it.</p>
       <div class="plain">
-        <span class="plain-label">What this enables</span>
-        The auditor does not need access to your AI model. They only need the graph, the context parameters, and the proof. Provenance is portable.
+        <span class="plain-label">Why it matters</span>
+        An LLM asked the same question twice can produce different narrations. The engine produces the same sealed bundle every time — so auditors can verify what the agent actually had at decision time.
+      </div>
+    </div>
+    <div class="compliance-card">
+      <h3>Regulatory Alignment</h3>
+      <p>Aligned with EU AI Act Article 13 (verifiable explanations, traceability), GDPR Article 22 (right to meaningful information about automated decisions), and emerging US sectoral standards (NYC LL 144, employment AI rules).</p>
+      <div class="plain">
+        <span class="plain-label">Important</span>
+        Operational from day one of production deployment — not just at regulatory deadlines. The same audit standard now appears in enterprise procurement, insurance underwriting, and customer disputes.
       </div>
     </div>
   </div>
@@ -944,7 +986,7 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
 <section id="pricing">
   <div class="section-label">Pricing</div>
   <h2>Start with a 14-day free trial</h2>
-  <p>All plans include full API access, SHA-256 proof chains, and all four artifact formats. Annual billing saves 15%.</p>
+  <p>All plans include full API access, SHA-256 sealed audit bundles, and all four artifact formats. Annual billing saves 15%.</p>
   <div class="pricing-grid">
 
     <div class="price-card">
@@ -952,11 +994,11 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
       <div class="price-amount">$299 <span>/mo</span></div>
       <div class="price-period">14-day free trial included</div>
       <ul class="price-features">
-        <li>1,000 API requests/month</li>
+        <li>1,000 audit bundles/month</li>
         <li>All 4 artifact formats</li>
-        <li>SHA-256 proof chains</li>
+        <li>SHA-256 sealed bundle_hash</li>
         <li>Email support</li>
-        <li>$0.30/request overage</li>
+        <li>$0.30/bundle overage</li>
       </ul>
       <a href="https://buy.stripe.com/14A9AV9hC5Q7dsb0rfaVa00" class="btn-primary">Start free trial</a>
     </div>
@@ -966,11 +1008,12 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
       <div class="price-amount">$1,499 <span>/mo</span></div>
       <div class="price-period">14-day free trial included</div>
       <ul class="price-features">
-        <li>5,000 API requests/month</li>
+        <li>5,000 audit bundles/month</li>
         <li>All 4 artifact formats</li>
-        <li>SHA-256 proof chains</li>
+        <li>SHA-256 sealed bundle_hash</li>
+        <li>Industry templates included</li>
         <li>Priority support</li>
-        <li>$0.20/request overage</li>
+        <li>$0.20/bundle overage</li>
       </ul>
       <a href="https://buy.stripe.com/00w14p1Pa2DV0Fpb5TaVa01" class="btn-primary">Start free trial</a>
     </div>
@@ -980,11 +1023,12 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
       <div class="price-amount">$3,499 <span>/mo</span></div>
       <div class="price-period">14-day free trial included</div>
       <ul class="price-features">
-        <li>20,000 API requests/month</li>
+        <li>20,000 audit bundles/month</li>
         <li>All 4 artifact formats</li>
         <li>Custom policy layers</li>
+        <li>Custom industry templates</li>
         <li>Dedicated support</li>
-        <li>$0.12/request overage</li>
+        <li>$0.12/bundle overage</li>
       </ul>
       <a href="https://buy.stripe.com/14AfZj51m5Q7afZei5aVa02" class="btn-primary">Start free trial</a>
     </div>
@@ -994,7 +1038,7 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
   <div class="enterprise-bar">
     <div>
       <h3>Enterprise</h3>
-      <p>From $8,000/month. Custom integrations, SLA, dedicated policy layers, on-premise deployment options.</p>
+      <p>From $8,000/month. Custom integrations, SLA, dedicated policy layers, on-premise deployment, vendor-agnostic audit workflows for enterprise procurement and internal audit teams.</p>
     </div>
     <a href="mailto:rudikalexx88@gmail.com" class="btn-primary">rudikalexx88@gmail.com</a>
   </div>
