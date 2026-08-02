@@ -570,8 +570,9 @@
     <a href="#how">How it works</a>
     <a href="#format">Graph format</a>
     <a href="#api">API</a>
+    <a href="#limits">Limitations</a>
     <a href="#pricing">Pricing</a>
-    <a href="#pricing" class="nav-cta">Start free trial</a>
+    <a href="#pilot" class="nav-cta">Anchor pilot</a>
   </div>
 </nav>
 
@@ -581,7 +582,7 @@
   <h1>Audit infrastructure for <span>AI agents</span> in production.</h1>
   <p>When your agent makes a decision someone will ask about later, logs show what happened — they don't prove why. Engine produces structured, cryptographically sealed audit bundles for AI-driven decisions, re-derivable bit-for-bit from inputs alone. Six months later, or six years later.</p>
   <div class="hero-buttons">
-    <a href="#pricing" class="btn-primary">Start 14-day free trial</a>
+    <a href="#pilot" class="btn-primary">Apply for the anchor pilot</a>
     <a href="#api" class="btn-secondary">View API docs</a>
   </div>
 </div>
@@ -858,7 +859,7 @@
 
   <!-- E. INDUSTRY TEMPLATES -->
   <div class="format-subhead">Industry templates</div>
-  <div class="format-subhead-desc">Production-ready starter graphs modelling real decision logic. Delivered as part of customer onboarding. Custom templates for specific agent and decision-pipeline use cases are part of Professional and higher plans.</div>
+  <div class="format-subhead-desc">Production-ready starter graphs modelling real decision logic. These exist as working JSON files and are shared on request or during onboarding; they are not yet published as a public library. Custom templates for specific agent and decision-pipeline use cases are part of Professional and higher plans.</div>
   <div class="templates-grid">
     <div class="template-card">
       <div class="template-label">Finance</div>
@@ -939,6 +940,43 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
   <span class="c-key">"proof"</span>: { <span class="c-com">/* SHA-256 determinism proof binding all computation hashes */</span> }
 }</pre>
   </div>
+
+  <div class="format-subhead">Three endpoints</div>
+  <div class="format-subhead-desc">The same request body works for <code style="font-family:var(--mono);color:var(--accent);">/v1/explain</code> and <code style="font-family:var(--mono);color:var(--accent);">/v1/bundle</code>. Verification takes a previously issued bundle.</div>
+  <div class="type-table" style="margin-bottom:1rem;">
+    <div class="type-table-header">Endpoints · 3</div>
+    <div class="type-row">
+      <div class="type-name">POST /v1/explain</div>
+      <div class="type-desc">Runs the full pipeline. Returns scores, flags, projections, and the proof object. Use when you need the result but are not storing a sealed record.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-name">POST /v1/bundle</div>
+      <div class="type-desc">Same input, returns the complete self-contained bundle including <span style="font-family:var(--mono);">bundleProof.bundleHash</span>. This is the artifact you store as the audit record.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-name">POST /v1/verify</div>
+      <div class="type-desc">Takes a previously issued bundle, recomputes the hash, and reports whether it matches. This is the endpoint an auditor uses — no re-execution of the pipeline required.</div>
+    </div>
+  </div>
+
+  <div class="code-section">
+    <div class="code-header">
+      <span>POST /v1/verify · auditor path</span>
+      <span class="code-dot"></span>
+    </div>
+    <pre><span class="c-com"># Hand the stored bundle back to the engine</span>
+curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/verify \
+  -H <span class="c-str">"Content-Type: application/json"</span> \
+  -H <span class="c-str">"x-api-key: YOUR_API_KEY"</span> \
+  --data-binary <span class="c-str">@stored_bundle.json</span>
+
+<span class="c-com"># Response</span>
+{
+  <span class="c-key">"verified"</span>: <span class="c-num">true</span>,
+  <span class="c-key">"expected"</span>: <span class="c-str">"&lt;bundleHash at sealing time&gt;"</span>,
+  <span class="c-key">"actual"</span>:   <span class="c-str">"&lt;bundleHash recomputed now&gt;"</span>
+}</pre>
+  </div>
 </section>
 
 <!-- AUDIT-READY BY DESIGN -->
@@ -957,7 +995,7 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
     </div>
     <div class="compliance-card">
       <h3>Third-Party Verification</h3>
-      <p>Any auditor can re-execute the pipeline with the same inputs and verify byte-level output identity — designed for independent audit workflows, vendor-agnostic.</p>
+      <p>Any auditor can re-execute the pipeline with the same inputs and verify byte-level output identity, or hand a stored bundle to <span style="font-family:var(--mono);">POST /v1/verify</span> for a hash check without re-running anything.</p>
       <div class="plain">
         <span class="plain-label">What this enables</span>
         The auditor does not need access to your AI model or your servers. They only need the graph, the context parameters, and the proof. Provenance is portable.
@@ -982,33 +1020,76 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
   </div>
 </section>
 
+<!-- LIMITATIONS -->
+<section id="limits">
+  <div class="section-label">Limitations</div>
+  <h2>What the engine does not do</h2>
+  <p>An audit product that oversells itself is worth less than one that states its boundary. This section is here so that nothing on this page has to be walked back during a procurement review.</p>
+  <div class="compliance-grid">
+    <div class="compliance-card">
+      <h3>It certifies the record, not the decision</h3>
+      <p>The engine attests that a specific graph, under a specific context, produced a specific result — and that the record has not been altered since. It does not evaluate whether the decision was correct, fair, or compliant. Those judgments stay with the deployer.</p>
+    </div>
+    <div class="compliance-card">
+      <h3>It does not build the graph for you</h3>
+      <p>The client system supplies the decision graph. The engine does not extract reasoning from text, logs, or model internals. Integration work is required on your side to map your decision logic onto the node and edge schema.</p>
+    </div>
+    <div class="compliance-card">
+      <h3>It seals content, not wall-clock time</h3>
+      <p>A submitted timestamp is sealed as content, but the engine does not attest that it is true. Time attestation requires an external anchor and is deliberately out of scope. Notary, not clock.</p>
+    </div>
+    <div class="compliance-card">
+      <h3>Current build limits</h3>
+      <p>The <span style="font-family:var(--mono);">recommendations</span> field is reserved in the schema and currently returns an empty array. Production runs in a single European region; multi-region deployment is on the roadmap. Graph construction is API-only — the hosted editor is not shipped.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ANCHOR PILOT -->
+<section id="pilot">
+  <div class="section-label">Anchor pilot</div>
+  <h2>Design partners, before general availability</h2>
+  <p>The engine is production-deployed and passing its full test suite, but it has not yet been run against your decision pipeline. The anchor pilot exists to change that — for a small number of teams, on terms that make the risk one-sided in your favour.</p>
+  <div class="compliance-grid">
+    <div class="compliance-card">
+      <h3>What you get</h3>
+      <p>Twelve weeks of full access at 50,000 sealed bundles per month. Direct work with the founder on mapping your decision logic onto the graph schema, including a custom template for your domain.</p>
+      <div class="plain">
+        <span class="plain-label">No payment during the pilot</span>
+        No card, no invoice, no automatic conversion at the end.
+      </div>
+    </div>
+    <div class="compliance-card">
+      <h3>What is asked in return</h3>
+      <p>A named case study once the integration is running, two reference calls with prospective customers, and honest feedback — including the parts that do not work.</p>
+      <div class="plain">
+        <span class="plain-label">What is not asked</span>
+        No equity, no exclusivity, no co-development obligation.
+      </div>
+    </div>
+  </div>
+  <div class="enterprise-bar" style="margin-top:2rem;">
+    <div>
+      <h3>Apply for a pilot slot</h3>
+      <p>Tell me what your system decides and where in the workflow a decision is finalised. If the fit is wrong, I will say so — the pilot is only useful to both of us if your pipeline already produces structured decision logic.</p>
+    </div>
+    <a href="mailto:rudikalexx88@gmail.com?subject=Anchor%20pilot%20application" class="btn-primary">rudikalexx88@gmail.com</a>
+  </div>
+</section>
+
 <!-- PRICING -->
 <section id="pricing">
   <div class="section-label">Pricing</div>
-  <h2>Start with a 14-day free trial</h2>
-  <p>All plans include full API access, SHA-256 sealed audit bundles, and all four artifact formats. Annual billing saves 15%.</p>
+  <h2>Plans after the pilot</h2>
+  <p>All plans include full API access to all three endpoints, SHA-256 sealed audit bundles, and all four artifact formats. Annual billing saves 15%.</p>
   <div class="pricing-grid">
-
-    <div class="price-card">
-      <div class="price-tier">Starter</div>
-      <div class="price-amount">$299 <span>/mo</span></div>
-      <div class="price-period">14-day free trial included</div>
-      <ul class="price-features">
-        <li>1,000 audit bundles/month</li>
-        <li>All 4 artifact formats</li>
-        <li>SHA-256 sealed bundle_hash</li>
-        <li>Email support</li>
-        <li>$0.30/bundle overage</li>
-      </ul>
-      <a href="https://buy.stripe.com/14A9AV9hC5Q7dsb0rfaVa00" class="btn-primary">Start free trial</a>
-    </div>
 
     <div class="price-card featured">
       <div class="price-tier">Professional</div>
       <div class="price-amount">$1,499 <span>/mo</span></div>
       <div class="price-period">14-day free trial included</div>
       <ul class="price-features">
-        <li>5,000 audit bundles/month</li>
+        <li>10,000 audit bundles/month</li>
         <li>All 4 artifact formats</li>
         <li>SHA-256 sealed bundle_hash</li>
         <li>Industry templates included</li>
@@ -1023,7 +1104,7 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
       <div class="price-amount">$3,499 <span>/mo</span></div>
       <div class="price-period">14-day free trial included</div>
       <ul class="price-features">
-        <li>20,000 audit bundles/month</li>
+        <li>50,000 audit bundles/month</li>
         <li>All 4 artifact formats</li>
         <li>Custom policy layers</li>
         <li>Custom industry templates</li>
@@ -1033,14 +1114,21 @@ curl -X POST https://explainability-engine-v1-production.up.railway.app/v1/expla
       <a href="https://buy.stripe.com/14AfZj51m5Q7afZei5aVa02" class="btn-primary">Start free trial</a>
     </div>
 
-  </div>
-
-  <div class="enterprise-bar">
-    <div>
-      <h3>Enterprise</h3>
-      <p>From $8,000/month. Custom integrations, SLA, dedicated policy layers, on-premise deployment, vendor-agnostic audit workflows for enterprise procurement and internal audit teams.</p>
+    <div class="price-card">
+      <div class="price-tier">Enterprise</div>
+      <div class="price-amount">from $8,000 <span>/mo</span></div>
+      <div class="price-period">Contract terms, invoiced</div>
+      <ul class="price-features">
+        <li>Custom volume</li>
+        <li>SLA and support commitments</li>
+        <li>Dedicated policy layers</li>
+        <li>Secret manager integration</li>
+        <li>On-premise deployment</li>
+        <li>Vendor-agnostic audit workflows</li>
+      </ul>
+      <a href="mailto:rudikalexx88@gmail.com?subject=Enterprise%20enquiry" class="btn-secondary">Talk to the founder</a>
     </div>
-    <a href="mailto:rudikalexx88@gmail.com" class="btn-primary">rudikalexx88@gmail.com</a>
+
   </div>
 </section>
 
